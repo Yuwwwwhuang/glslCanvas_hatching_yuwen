@@ -22,15 +22,15 @@ uniform sampler2D u_tex6;
 void main()
 {
     vec2 uv= gl_FragCoord.xy/u_resolution.xy;
-    vec2 vUv=fract(6.0*uv);                        //key
-    float shading= texture2D(u_tex0, uv).g; //取MonaLisa綠色版作為明亮值
+    vec2 vUv=fract(6.0*uv);                        //key 切成6單位 數字條越大，hatch越細
+    float shading= texture2D(u_tex0, uv).g; //取MonaLisa綠色版作為明亮值 .g=只拿綠色色版，因為只需單色印刷的明亮度 占七成（紅色色版明亮值21% 藍色色版只貢獻9%）
 
 
     vec4 c;
                 float step = 1. / 6.;
-                if( shading <= step ){   
+                if( shading <= step ){   //切成0~1/6 最暗的地方
                     c = mix( texture2D( u_tex6, vUv ), texture2D( u_tex5, vUv ), 6. * shading );
-                }
+                } //兩張圖的權重分配 淡化階層之間的斷層
                 if( shading > step && shading <= 2. * step ){
                     c = mix( texture2D( u_tex5, vUv ), texture2D( u_tex4, vUv) , 6. * ( shading - step ) );
                 }
